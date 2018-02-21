@@ -2,6 +2,7 @@ import requests
 
 import pandas as pd
 import numpy as np
+import datetime as dt
 
 from random import choice
 from lxml import html
@@ -56,6 +57,7 @@ class Commodity:
         for col in df.columns:
             if col == 'date':
                 df[col] = pd.to_datetime(df[col])
+                df[col] = df[col].apply(lambda x: dt.datetime.strftime(x, '%Y-%m-%dT%H:%M:%SZ'))
             elif col == 'vol':
                 df[col] = df[col].apply(lambda x: x.replace('K', '').replace('-', '0')).astype('float') * 1000
             elif col == 'change':
@@ -75,7 +77,7 @@ class Commodity:
         df = df[columns]
 
         # set index for TS processing
-        df.set_index('date', inplace=True)
+        # df.set_index('date', inplace=True)
 
         return df
 

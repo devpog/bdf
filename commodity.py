@@ -16,67 +16,64 @@ from core.database import *
 
 
 def main():
+
+    # Set working directories
+    cwd = os.getcwd()
+    data_dir = os.path.join(cwd, 'data')
+    log_dir = os.path.join(cwd, 'log')
+    log_file = os.path.join(log_dir, 'commodity.log')
+
     # Define logger and its config
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    handler = logging.FileHandler('etl.log')
+    handler = logging.FileHandler(log_file)
     handler.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
+    # Set args parser
     parser = optparse.OptionParser()
+
+    # commodity option
     parser.add_option('-c', '--commodity',
                       dest='commodity',
                       help='commodity to work with [default: %default]')
+    # init option
     parser.add_option('-i', '--init', '--initialize',
                       action='store_true', dest='init',
                       help='initial database population [default: %default]')
-    parser.set_defaults(commodity='gold', init=False)
+    # price option
+    parser.add_option('-p', '--price',
+                      action='store_true', dest='price',
+                      help='calculate price [default: %default]')
+
+    parser.set_defaults(commodity='gold', init=False, price=False)
     opts, args = parser.parse_args()
 
     # Parse input params
-    commodity = opts.exchange
+    commodity = opts.commodity
     run_init = opts.init
-
-    # Set working directories
-    cwd = os.getcwd()
-    data_dir = os.path.join(cwd, 'data')
 
     # Set database
     db = Database(name='bdf')
 
-    # Set exchange
+    # Set commodity
     comm = Commodity(name=commodity)
 
     if run_init:
         logger.info('initial run...')
-        for symbol in symbols:
-            time.sleep(timeout)
-            logger.info('adding records for {0}'.format(symbol))
-            data = ex.fetch_ohlcv(symbol)
-            db.add_records(data)
-            logger.info('{0} records added'.format(len(data)))
+        logger.info('adding records for {0}'.format(commodity))
 
+        db.populate_records(comm.data)
+        logger.info('{0} records added'.format(len(comm.data)))
     else:
-        logger.info('updating records...')
-        if currency == 'all':
-            symbols = ex.symbols
+        logger.info('updating records for {0}'.format(commodity))
+        data = db.add_records(comm.data, commodity)
+        if len(data) > 0:
+            logger.info('{0} records added'.format(len(data)))
         else:
-            symbols = [x for x in ex.symbols if r.search(x)]
-
-        for symbol in symbols:
-            time.sleep(timeout)
-            last_update = db.get_last_record(symbol)
-            logger.info('adding records for {0}'.format(symbol))
-            data = ex.fetch_ohlcv(symbol
-                                  )
-            update = data.loc[data.time > last_update, :]
-            if len(update) > 0:
-                db.add_records(update)
-                logger.info('{0} records added'.format(len(update)))
-            else:
-                logger.info('no updates')
+            logger.info("updated today's record".format(len(data)))
 
 
 if __name__ == '__main__':
