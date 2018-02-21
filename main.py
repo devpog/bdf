@@ -1,5 +1,7 @@
 from core.commodity import *
+from core.database import *
 
 comm01 = Commodity(name='gold')
+db01 = Database(name='bdf')
 
-print(comm01.name)
+db01.add_records(comm01.data)

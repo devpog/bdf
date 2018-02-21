@@ -1,0 +1,88 @@
+Dear Kyrylo Pogrebenko,
+
+
+
+Thank you for submitting an online application for the position of Senior Data Scientist with Big Data Federation in Santa Clara, CA.
+
+We have looked over your application and would like to take the next step.
+
+
+
+It would help quite a bit if you could tackle the following (hopefully not too demanding) coding assignment before you come in:
+
+
+
+1. Please write a program to fetch the historical prices and dates of gold and silver from these 2 URLs:
+
+•            https://www.investing.com/commodities/gold-historical-data
+
+•            https://www.investing.com/commodities/silver-historical-data
+
+and store them locally (in a file or database, as you see fit).
+
+(You can just extract the default data range in each case: no need to interact with the UI elements.)
+
+
+
+2. Please then write a second program that takes the following 3 command line arguments:
+
+•            Start date (in the format 2017-05-10)
+
+•            End date (in the format 2017-05-22)
+
+•            Commodity type (either "gold" or silver”)
+
+and then returns (via the locally stored data) the mean and variance of the commodity’s price over the specified date range.
+
+For example, the program might be called like so:
+
+./getCommodityPrice 2017-05-01 2017-05-03 gold
+
+and would print out a tuple such as:
+
+gold 1253.66 35.79
+
+
+
+3. As the last step, please write a program to help you decide if the previous gold or silver prices are good predictors for their future prices.
+
+Also do the same to check if an increase or decrease in the price is predictable. (There is no need to do the actual prediction.)
+
+
+
+Please feel free to use whatever language you think is best suited to the task and/or familiar to you.
+
+
+
+Please also feel free to consult references (e.g. hard to remember libraries, function names, call signatures, etc.) as necessary, and don’t be shy about asking for help if you get stuck, especially in the HTML parsing.
+
+(hint: try to find an XPath based parsing library and use Google Chrome to infer the XPath to the table; you may need to set the User-Agent.)
+
+
+
+
+
+Please try to send your result by this week Saturday February 24, 2018 end of day.
+
+
+
+Looking forward to hearing back from you soon.
+
+
+
+Best Regards,
+
+
+
+Peter Walther | VP
+
+Email: peter@bigdatafed.com
+
+
+
+Big Data Federation, Inc.
+
+990 Linden Drive, #220
+
+Santa Clara, CA 95050
+

@@ -63,10 +63,24 @@ class Commodity:
             else:
                 df[col] = df[col].apply(lambda x: x.replace(',', '')).astype('float')
 
+        # add commodity name and re-order columns
+        df['commodity'] = self.__name
+        columns = df.columns.tolist()
+        columns.insert(1, 'commodity')
+
+        # remove duplicated column name
+        columns.pop()
+
+        # re-arrange columns
+        df = df[columns]
+
         # set index for TS processing
         df.set_index('date', inplace=True)
 
         return df
+
+    def store(self):
+        pass
 
     @property
     def name(self):
