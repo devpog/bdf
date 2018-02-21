@@ -1,11 +1,7 @@
 import pymongo
 import json
-import datetime
-import time
 
 import pandas as pd
-
-from pymongo import ReturnDocument
 
 
 class Database:
@@ -21,6 +17,9 @@ class Database:
         # dynamic
         self.__conn = pymongo.MongoClient(host=self.__host, port=self.__port)
         self.__db = self.conn[self.__name]
+
+        if self.__collection == 'commodity':
+            self.__columns = ['date', 'commodity', 'high', 'low', 'open', 'price', 'vol', 'change']
 
     def __enter__(self):
         return self.__db
@@ -64,14 +63,26 @@ class Database:
 
         return new_records
 
-    def get_commodity(self, commodity):
-        return self.__db[self.__collection].find(
-            {self.__column: commodity},
-            sort=[(self.__ts_field, pymongo.DESCENDING)])
+    def get_commodity(self, commodity, start_date=None, end_date=None):
+        data = pd.DataFrame(list(
+            self.__db[self.__collection].find({self.__column: commodity},
+                                              sort=[(self.__ts_field, pymongo.DESCENDING)])))
+        data[self.__ts_field] = pd.to_datetime(data[self.__ts_field])
+
+        if start_date is None and end_date is None:
+            pass
+        elif end_date is None and start_date is not None:
+            data = data.loc[data[self.__ts_field] >= start_date, :]
+        elif end_date is not None and start_date is not None:
+            data = data.loc[((data[self.__ts_field] >= start_date) & (data[self.__ts_field] <= end_date)), :]
+
+        return data[self.__columns]
 
     @property
     def data(self):
-        return self.__db[self.__collection].find(sort=[(self.__ts_field, pymongo.DESCENDING)])
+        data = pd.DataFrame(list(self.__db[self.__collection].find(sort=[(self.__ts_field, pymongo.DESCENDING)])))
+        data[self.__ts_field] = pd.to_datetime(data[self.__ts_field])
+        return data[self.__columns]
 
     @property
     def name(self):
