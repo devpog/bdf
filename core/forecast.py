@@ -129,6 +129,14 @@ class Forecast:
         return self.__series
 
     @property
+    def X_test(self):
+        return [c[0] for c in self.__X_test[0]]
+
+    @property
+    def Y_test(self):
+        return [c[0] for c in self.__Y_test[0]]
+
+    @property
     def num_periods(self):
         return self.__num_periods
 
