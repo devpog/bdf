@@ -18,6 +18,9 @@ from core.database import *
 
 def main():
 
+    # static features
+    commodities = ['gold', 'silver']
+
     # Set working directories
     cwd = os.path.dirname(sys.argv[0])
     data_dir = os.path.join(cwd, 'data')
@@ -45,6 +48,12 @@ def main():
     parser.add_option('-i', '--init', '--initialize',
                       action='store_true', dest='init',
                       help='initial database population [default: %default]')
+
+    # update option
+    parser.add_option('-u', '--update',
+                      action='store_true', dest='update',
+                      help="update commodity's price [default: %default]")
+
     # price option
     parser.add_option('-p', '--price',
                       action='store_true', dest='price',
@@ -65,9 +74,26 @@ def main():
     # Parse input params
     commodity = opts.commodity
     run_init = opts.init
+    run_update = opts.update
     get_price = opts.price
     start_date = opts.start_date
     end_date = opts.end_date
+
+    if commodity not in commodities:
+        print("commodity error: only 'gold' and 'silver' supported")
+        exit(1)
+
+    if run_init and get_price:
+        print("init error: either '-i' or '-p' could be given, but not both")
+        exit(1)
+
+    if run_update and run_init:
+        print("update error: either '-u' or '-i' could be given, but not both")
+        exit(1)
+
+    if get_price and run_update :
+        print("price error: either '-p' or '-u' could be given, but not both")
+        exit(1)
 
     # Set database
     db = Database(name='bdf')
@@ -75,14 +101,14 @@ def main():
     # Set commodity
     comm = Commodity(name=commodity)
 
-    if run_init and not get_price:
+    if run_init:
         logger.info('initial run...')
         logger.info('adding records for {0}'.format(commodity))
 
         db.populate_records(comm.data)
         logger.info('{0} records added'.format(len(comm.data)))
         exit(0)
-    elif not run_init and not get_price:
+    elif run_update:
         logger.info('updating records for {0}'.format(commodity))
         data = db.add_records(comm.data, commodity)
         if len(data) > 0:
@@ -90,15 +116,22 @@ def main():
         else:
             logger.info("updated today's record".format(len(data)))
         exit(0)
-    elif not run_init and get_price:
+    elif get_price:
+
         p = re.compile(r'\d{4}-\d{2}-\d{2}')
-        if start_date is not None and end_date is not None:
-            if not p.match(start_date) or not p.match(end_date):
-                print('date error: parameters start_date or end_date must be in a form of YYYY-MM-DD')
-            else:
-                data = db.get_stats(commodity=commodity, metric='price', start_date=start_date, end_date=end_date)
-                print(data)
-                exit(0)
+        if start_date is not None:
+            if not p.match(start_date):
+                print("date error: '-s' or 'start_date' must be in a form of YYYY-MM-DD")
+                exit(1)
+
+        if end_date is not None:
+            if not p.match(end_date):
+                print("date error: '-e' or 'end_date' must be in a form of YYYY-MM-DD")
+                exit(1)
+
+        data = db.get_stats(commodity=commodity, metric='price', start_date=start_date, end_date=end_date)
+        print(data)
+        exit(0)
 
 
 if __name__ == '__main__':

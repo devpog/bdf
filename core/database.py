@@ -76,6 +76,8 @@ class Database:
             data = data.loc[data[self.__ts_field] >= start_date, :]
         elif end_date is not None and start_date is not None:
             data = data.loc[((data[self.__ts_field] >= start_date) & (data[self.__ts_field] <= end_date)), :]
+        elif end_date is not None and start_date is None:
+            data = data.loc[(data[self.__ts_field] <= end_date), :]
 
         return data[self.__columns]
 
@@ -91,6 +93,8 @@ class Database:
             data = data.loc[data[self.__ts_field] >= start_date, :]
         elif end_date is not None and start_date is not None:
             data = data.loc[((data[self.__ts_field] >= start_date) & (data[self.__ts_field] <= end_date)), :]
+        elif end_date is not None and start_date is None:
+            data = data.loc[(data[self.__ts_field] <= end_date), :]
 
         data = data[self.__columns]
 
