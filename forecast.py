@@ -16,7 +16,7 @@ commodity = 'gold'
 data = db.get_commodity(commodity)
 data.set_index('date', inplace=True)
 
-forecast = Forecast(data['price'], 'arima')
+forecast = Forecast(data['price'], 'rnn')
 
 
 forecast.rnn()

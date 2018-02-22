@@ -106,7 +106,7 @@ class Forecast:
 
                 y_hat = sess.run(self.__outputs, feed_dict={self.__X: self.__X_test})
 
-                self.__y_hat = y_hat
+                self.__y_hat = [c[0] for c in y_hat[0]]
 
                 return self.__y_hat
         else:
@@ -115,7 +115,6 @@ class Forecast:
     def fit_predict(self):
         self.fit()
         return self.predict()
-        # return self.__y_hat
 
     def __test_data(self, series, horizon, num_periods):
         test_x_setup = series[-(num_periods + horizon):]
