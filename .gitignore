@@ -6,5 +6,5 @@
 *.pid
 *.gz
 
-__pycache__/
+core/__pycache__/
 .idea/
