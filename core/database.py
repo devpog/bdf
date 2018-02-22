@@ -2,6 +2,7 @@ import pymongo
 import json
 
 import pandas as pd
+import numpy as np
 
 
 class Database:
@@ -77,6 +78,40 @@ class Database:
             data = data.loc[((data[self.__ts_field] >= start_date) & (data[self.__ts_field] <= end_date)), :]
 
         return data[self.__columns]
+
+    def get_stats(self, commodity, metric=None, start_date=None, end_date=None):
+        data = pd.DataFrame(list(
+            self.__db[self.__collection].find({self.__column: commodity},
+                                              sort=[(self.__ts_field, pymongo.DESCENDING)])))
+        data[self.__ts_field] = pd.to_datetime(data[self.__ts_field])
+
+        if start_date is None and end_date is None:
+            pass
+        elif end_date is None and start_date is not None:
+            data = data.loc[data[self.__ts_field] >= start_date, :]
+        elif end_date is not None and start_date is not None:
+            data = data.loc[((data[self.__ts_field] >= start_date) & (data[self.__ts_field] <= end_date)), :]
+
+        data = data[self.__columns]
+
+        index = []
+        result = []
+
+        if metric is None:
+            metrics = [c for c in data.columns if c not in ['date', 'commodity']]
+        else:
+            metrics = [metric]
+
+        for m in metrics:
+            index.append(m)
+            row = list()
+            row.append(commodity)
+            row.append(np.mean(data[m]))
+            row.append(np.var(data[m]))
+            result.append(row)
+        stats = pd.DataFrame(result, columns=['commodity', 'mean', 'var'], index=index)
+        stats.reset_index(inplace=True)
+        return stats
 
     @property
     def data(self):
