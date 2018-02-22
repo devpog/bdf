@@ -8,6 +8,7 @@ Init
 
 import re
 import os
+import sys
 import optparse
 import logging
 
@@ -18,8 +19,9 @@ from core.database import *
 def main():
 
     # Set working directories
-    cwd = os.getcwd()
+    cwd = os.path.dirname(sys.argv[0])
     data_dir = os.path.join(cwd, 'data')
+
     log_dir = os.path.join(cwd, 'log')
     log_file = os.path.join(log_dir, 'commodity.log')
 
