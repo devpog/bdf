@@ -28,6 +28,10 @@ cryptography==2.1.4
 cycler==0.10.0
 Cython==0.27.3
 cytoolz==0.9.0
+dash==0.21.0
+dash-core-components==0.18.1
+dash-html-components==0.8.0
+dash-renderer==0.11.3
 dask==0.16.1
 datashape==0.5.4
 decorator==4.2.1
@@ -38,6 +42,7 @@ et-xmlfile==1.0.1
 fastcache==1.0.2
 filelock==2.0.13
 Flask==0.12.2
+Flask-Compress==1.4.0
 Flask-Cors==3.0.3
 gevent==1.2.2
 glob2==0.6
@@ -103,6 +108,7 @@ pexpect==4.3.1
 pickleshare==0.7.4
 Pillow==5.0.0
 pkginfo==1.4.1
+plotly==2.4.1
 pluggy==0.6.0
 ply==3.10
 prompt-toolkit==1.0.15
@@ -125,7 +131,7 @@ pyparsing==2.2.0
 PySocks==1.6.7
 pytest==3.3.2
 python-dateutil==2.6.1
-pytz==2017.3
+pytz==2018.3
 PyWavelets==0.5.2
 PyYAML==3.12
 pyzmq==16.0.3

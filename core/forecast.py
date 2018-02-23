@@ -46,7 +46,7 @@ class Forecast:
 
         self.__y_hat = None
 
-    def rnn(self, num_periods=5, horizon=1, hidden=100, inputs=1, output=1, learning_rate=0.001, epochs=1000):
+    def rnn(self, num_periods=7, horizon=1, hidden=100, inputs=1, output=1, learning_rate=0.001, epochs=1000):
 
         self.__num_periods = num_periods
         self.__horizon = horizon
