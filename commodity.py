@@ -81,7 +81,7 @@ def main():
                       help='start date for price calculation [default: %default]',
                       metavar='YYYY-MM-DD')
 
-    parser.set_defaults(commodity='gold', init=False, price=False, start_date=None, end_date=None)
+    parser.set_defaults(commodity='gold', init=False, update=False, price=False, start_date=None, end_date=None)
     opts, args = parser.parse_args()
 
     # Parse input params
