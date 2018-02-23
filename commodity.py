@@ -11,9 +11,14 @@ import os
 import sys
 import optparse
 import logging
+import warnings
 
 from core.commodity import *
 from core.database import *
+
+
+# disable warnings
+warnings.filterwarnings("ignore")
 
 
 def main():
