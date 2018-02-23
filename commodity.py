@@ -20,6 +20,11 @@ from core.database import *
 # disable warnings
 warnings.filterwarnings("ignore")
 
+# remove annoying h5y warning
+for i in range(3):
+    sys.stdout.write('\033[F')
+    sys.stdout.write('\033[K')
+
 
 def main():
 
@@ -48,7 +53,8 @@ def main():
     # commodity option
     parser.add_option('-c', '--commodity',
                       dest='commodity',
-                      help='commodity to work with [default: %default]')
+                      help='commodity to work with [default: %default]',
+                      metavar='<gold|silver>')
     # init option
     parser.add_option('-i', '--init', '--initialize',
                       action='store_true', dest='init',
@@ -67,11 +73,13 @@ def main():
     # commodity option
     parser.add_option('-s', '--start_date',
                       dest='start_date',
-                      help='start date for price calculation [default: %default]')
+                      help='start date for price calculation [default: %default]',
+                      metavar='YYYY-MM-DD')
 
     parser.add_option('-e', '--end_date',
                       dest='end_date',
-                      help='start date for price calculation [default: %default]')
+                      help='start date for price calculation [default: %default]',
+                      metavar='YYYY-MM-DD')
 
     parser.set_defaults(commodity='gold', init=False, price=False, start_date=None, end_date=None)
     opts, args = parser.parse_args()
