@@ -79,6 +79,7 @@ class Database:
         elif end_date is not None and start_date is None:
             data = data.loc[(data[self.__ts_field] <= end_date), :]
 
+        data.drop_duplicates(inplace=True)
         return data[self.__columns]
 
     def get_stats(self, commodity, metric=None, start_date=None, end_date=None):
@@ -96,6 +97,7 @@ class Database:
         elif end_date is not None and start_date is None:
             data = data.loc[(data[self.__ts_field] <= end_date), :]
 
+        data.drop_duplicates(inplace=True)
         data = data[self.__columns]
 
         index = []
@@ -121,6 +123,7 @@ class Database:
     def data(self):
         data = pd.DataFrame(list(self.__db[self.__collection].find(sort=[(self.__ts_field, pymongo.DESCENDING)])))
         data[self.__ts_field] = pd.to_datetime(data[self.__ts_field])
+        data.drop_duplicates(inplace=True)
         return data[self.__columns]
 
     @property
